@@ -32,10 +32,13 @@ class DynamicContentSubscriber implements EventSubscriberInterface
         }
 
         $deviceType = $leadDevice->getDevice();
-
-        if (isset($filters[0]) && $deviceType) {
-            $event->setIsEvaluated(true);
-            $event->setIsMatched(in_array($deviceType, $filters[0]["filter"]));
+        foreach ($filters as $filter) {
+            if ($filter['type'] === 'device_type') {
+                if ($deviceType) {
+                    $event->setIsEvaluated(true);
+                    $event->setIsMatched(in_array($deviceType, $filter["filter"]));
+                }
+            }
         }
     }
 }
