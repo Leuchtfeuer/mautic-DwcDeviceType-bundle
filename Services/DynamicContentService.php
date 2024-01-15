@@ -38,18 +38,12 @@ class DynamicContentService
         }
 
         return false;
-
     }
 
-    /**
-     * @param LeadDevice $device
-     *
-     * @return array
-     */
     public function convertDeviceToArray(LeadDevice $device): array
     {
         return [
-            'id' => $device->getId(),
+            'id'     => $device->getId(),
             'device' => $device->getDevice(),
         ];
     }

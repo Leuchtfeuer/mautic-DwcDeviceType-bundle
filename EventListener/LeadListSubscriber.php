@@ -28,15 +28,15 @@ class LeadListSubscriber implements EventSubscriberInterface
 
     public function __construct(ListModel $listModel, TranslatorInterface $translator, FieldChoicesProviderInterface $fieldChoicesProvider)
     {
-        $this->listModel = $listModel;
-        $this->translator = $translator;
+        $this->listModel            = $listModel;
+        $this->translator           = $translator;
         $this->fieldChoicesProvider = $fieldChoicesProvider;
     }
 
     public static function getSubscribedEvents()
     {
         return [
-            LeadEvents::LIST_FILTERS_CHOICES_ON_GENERATE    => ['onFilterChoiceFieldsGenerate', 0]
+            LeadEvents::LIST_FILTERS_CHOICES_ON_GENERATE    => ['onFilterChoiceFieldsGenerate', 0],
         ];
     }
 

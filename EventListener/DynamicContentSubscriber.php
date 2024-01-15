@@ -8,6 +8,7 @@ use Mautic\LeadBundle\Entity\LeadDevice;
 use Mautic\LeadBundle\Model\DeviceModel;
 use MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\Services\DynamicContentService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 class DynamicContentSubscriber implements EventSubscriberInterface
 {
     public function __construct(protected DeviceModel $deviceModel, protected DynamicContentService $dynamicContentService)
@@ -33,10 +34,10 @@ class DynamicContentSubscriber implements EventSubscriberInterface
 
         $deviceType = $leadDevice->getDevice();
         foreach ($filters as $filter) {
-            if ($filter['type'] === 'device_type') {
+            if ('device_type' === $filter['type']) {
                 if ($deviceType) {
                     $event->setIsEvaluated(true);
-                    $event->setIsMatched(in_array($deviceType, $filter["filter"]));
+                    $event->setIsMatched(in_array($deviceType, $filter['filter']));
                 }
             }
         }
