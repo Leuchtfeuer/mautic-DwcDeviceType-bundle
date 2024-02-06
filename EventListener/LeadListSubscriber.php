@@ -7,7 +7,7 @@ use Mautic\LeadBundle\LeadEvents;
 use Mautic\LeadBundle\Model\ListModel;
 use Mautic\LeadBundle\Provider\FieldChoicesProviderInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class LeadListSubscriber implements EventSubscriberInterface
 {
