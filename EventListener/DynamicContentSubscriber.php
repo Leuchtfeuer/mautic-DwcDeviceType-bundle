@@ -6,13 +6,18 @@ use Mautic\DynamicContentBundle\DynamicContentEvents;
 use Mautic\DynamicContentBundle\Event\ContactFiltersEvaluateEvent;
 use Mautic\LeadBundle\Entity\LeadDevice;
 use Mautic\LeadBundle\Model\DeviceModel;
-use MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\Services\DynamicContentService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class DynamicContentSubscriber implements EventSubscriberInterface
 {
-    public function __construct(protected DeviceModel $deviceModel, protected DynamicContentService $dynamicContentService)
+    /**
+     * @var DeviceModel
+     */
+    protected DeviceModel $deviceModel;
+
+    public function __construct(DeviceModel $deviceModel)
     {
+        $this->deviceModel = $deviceModel;
     }
 
     public static function getSubscribedEvents(): array
