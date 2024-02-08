@@ -31,7 +31,6 @@ class DynamicContentSubscriber implements EventSubscriberInterface
     {
         $filters = $event->getFilters();
         $contact = $event->getContact();
-        /** @var LeadDevice $leadDevice */
         $leadDevice = $this->deviceModel->getEntity($contact->getId());
         if (empty($leadDevice)) {
             return;
@@ -40,7 +39,7 @@ class DynamicContentSubscriber implements EventSubscriberInterface
         $deviceType = $leadDevice->getDevice();
         foreach ($filters as $filter) {
             if ('device_type' === $filter['type']) {
-                if ($deviceType) {
+                if (in_array($deviceType, $filter['filter'])) {
                     $event->setIsEvaluated(true);
                     $event->setIsMatched(in_array($deviceType, $filter['filter']));
                 }
