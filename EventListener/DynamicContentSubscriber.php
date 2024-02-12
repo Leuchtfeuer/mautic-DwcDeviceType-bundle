@@ -36,7 +36,6 @@ class DynamicContentSubscriber implements EventSubscriberInterface
         if (empty($leadDevice)) {
             return;
         }
-        var_dump($event->getFilters());
         $deviceType = $leadDevice[0]['device'];
         foreach ($filters as $filter) {
             if ('device_type' === $filter['type']) {
