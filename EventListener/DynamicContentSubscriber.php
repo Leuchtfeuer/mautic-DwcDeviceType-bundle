@@ -20,7 +20,7 @@ class DynamicContentSubscriber implements EventSubscriberInterface
      */
     private DeviceModel $deviceModel;
 
-    public function __construct(DeviceModel $deviceModel, IntegrationHelper $helper)
+    public function __construct(IntegrationHelper $helper, DeviceModel $deviceModel)
     {
         $this->helper       = $helper;
         $this->deviceModel  = $deviceModel;
