@@ -22,4 +22,5 @@ Adds the option to filter for device type in dynamic web content.
 
 ## Author
 Leuchtfeuer Digital Marketing GmbH
+
 mautic@Leuchtfeuer.com
