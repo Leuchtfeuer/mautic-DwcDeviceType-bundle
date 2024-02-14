@@ -24,4 +24,5 @@
 
 ## Author
 Leuchtfeuer Digital Marketing GmbH
+
 mautic@Leuchtfeuer.com
