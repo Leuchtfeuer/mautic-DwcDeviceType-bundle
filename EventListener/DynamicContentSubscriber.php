@@ -4,14 +4,13 @@ namespace MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\EventListener;
 
 use Mautic\DynamicContentBundle\DynamicContentEvents;
 use Mautic\DynamicContentBundle\Event\ContactFiltersEvaluateEvent;
-use Mautic\LeadBundle\Entity\LeadDevice;
 use Mautic\LeadBundle\Model\DeviceModel;
-use MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\Services\DynamicContentService;
+use Mautic\PluginBundle\Helper\IntegrationHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class DynamicContentSubscriber implements EventSubscriberInterface
 {
-    public function __construct(protected DeviceModel $deviceModel, protected DynamicContentService $dynamicContentService)
+    public function __construct(private IntegrationHelper $helper, private DeviceModel $deviceModel)
     {
     }
 
@@ -24,6 +23,12 @@ class DynamicContentSubscriber implements EventSubscriberInterface
 
     public function onContactFiltersEvaluate(ContactFiltersEvaluateEvent $event): void
     {
+        $myIntegration = $this->helper->getIntegrationObject('LeuchtfeuerDwcDeviceType');
+
+        if (false === $myIntegration || !$myIntegration->getIntegrationSettings()->getIsPublished()) {
+            return;
+        }
+
         $filters = $event->getFilters();
         $contact = $event->getContact();
         $leadDeviceRepository = $this->deviceModel->getRepository();

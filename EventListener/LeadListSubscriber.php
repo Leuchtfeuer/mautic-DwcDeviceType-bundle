@@ -6,31 +6,16 @@ use Mautic\LeadBundle\Event\LeadListFiltersChoicesEvent;
 use Mautic\LeadBundle\LeadEvents;
 use Mautic\LeadBundle\Model\ListModel;
 use Mautic\LeadBundle\Provider\FieldChoicesProviderInterface;
+use Mautic\PluginBundle\Helper\IntegrationHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LeadListSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var ListModel
-     */
-    private $listModel;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var FieldChoicesProviderInterface
-     */
-    private $fieldChoicesProvider;
-
-    public function __construct(ListModel $listModel, TranslatorInterface $translator, FieldChoicesProviderInterface $fieldChoicesProvider)
+    public function __construct(private IntegrationHelper $helper, private ListModel $listModel, private TranslatorInterface $translator, private FieldChoicesProviderInterface $fieldChoicesProvider)
     {
-        $this->listModel            = $listModel;
-        $this->translator           = $translator;
-        $this->fieldChoicesProvider = $fieldChoicesProvider;
+
     }
 
     public static function getSubscribedEvents()
@@ -42,6 +27,12 @@ class LeadListSubscriber implements EventSubscriberInterface
 
     public function onFilterChoiceFieldsGenerate(LeadListFiltersChoicesEvent $event)
     {
+        $myIntegration = $this->helper->getIntegrationObject('LeuchtfeuerDwcDeviceType');
+
+        if (false === $myIntegration || !$myIntegration->getIntegrationSettings()->getIsPublished()) {
+            return;
+        }
+        
         $config = [
             'label'         => $this->translator->trans('mautic.plugin.device_type'),
             'properties'    => [
