@@ -37,6 +37,7 @@ return [
             'mautic.plugin.leuchtfeuerdwcdevicetype.leadlist.subscriber' => [
                 'class'     => \MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\EventListener\LeadListSubscriber::class,
                 'arguments' => [
+                    'mautic.helper.integration',
                     'mautic.lead.model.list',
                     'translator',
                     'mautic.lead.provider.fieldChoices'
@@ -45,6 +46,7 @@ return [
             'mautic.plugin.leuchtfeuerdwcdevicetype.dynamiccontent.subscriber' => [
                 'class'     => \MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\EventListener\DynamicContentSubscriber::class,
                 'arguments' => [
+                    'mautic.helper.integration',
                     'mautic.lead.model.device',
                 ],
             ],
