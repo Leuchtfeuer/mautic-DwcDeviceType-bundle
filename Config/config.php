@@ -2,7 +2,7 @@
 
 return [
     'name'          => 'Device type filter for DWC',
-    'description'   => 'Introduce menu item which gives access to the Audit Log',
+    'description'   => 'Adds the option to filter for device type in dynamic web content',
     'version'       => '1.0',
     'author'        => 'Leuchtfeuer Digital Marketing GmbH',
 
@@ -30,6 +30,24 @@ return [
                     'mautic.lead.model.field',
                     'mautic.plugin.model.integration_entity',
                     'mautic.lead.model.dnc',
+                ],
+            ],
+        ],
+        'events' => [
+            'mautic.plugin.leuchtfeuerdwcdevicetype.leadlist.subscriber' => [
+                'class'     => \MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\EventListener\LeadListSubscriber::class,
+                'arguments' => [
+                    'mautic.helper.integration',
+                    'mautic.lead.model.list',
+                    'translator',
+                    'mautic.lead.provider.fieldChoices'
+                ],
+            ],
+            'mautic.plugin.leuchtfeuerdwcdevicetype.dynamiccontent.subscriber' => [
+                'class'     => \MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\EventListener\DynamicContentSubscriber::class,
+                'arguments' => [
+                    'mautic.helper.integration',
+                    'mautic.lead.model.device',
                 ],
             ],
         ],
