@@ -17,4 +17,8 @@ return static function (ContainerConfigurator $configurator) {
 
     $services->load('MauticPlugin\\LeuchtfeuerDwcDeviceTypeBundle\\', '../')
         ->exclude('../{'.implode(',', array_merge(MauticCoreExtension::DEFAULT_EXCLUDES, $excludes)).'}');
+    $services->alias(
+        'mautic.integration.leuchtfeuerdwcdevicetype',
+        MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\Integration\LeuchtfeuerDwcDeviceTypeIntegration::class
+    );
 };

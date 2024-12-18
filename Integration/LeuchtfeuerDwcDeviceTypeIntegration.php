@@ -2,26 +2,30 @@
 
 namespace MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\Integration;
 
-use Mautic\PluginBundle\Integration\AbstractIntegration;
+use Mautic\IntegrationsBundle\Integration\BasicIntegration;
+use Mautic\IntegrationsBundle\Integration\DefaultConfigFormTrait;
+use Mautic\IntegrationsBundle\Integration\Interfaces\BasicInterface;
+use Mautic\IntegrationsBundle\Integration\Interfaces\ConfigFormInterface;
 
-class LeuchtfeuerDwcDeviceTypeIntegration extends AbstractIntegration
+class LeuchtfeuerDwcDeviceTypeIntegration extends BasicIntegration implements BasicInterface, ConfigFormInterface
 {
-    public const PLUGIN_NAME         = 'LeuchtfeuerDwcDeviceType';
-    public const DISPLAY_NAME        = 'Device type filter for DWC';
-    public const AUTHENTICATION_TYPE = 'none';
+    use DefaultConfigFormTrait;
 
-    public function getName()
+    public const PLUGIN_NAME  = 'LeuchtfeuerDwcDeviceType';
+    public const DISPLAY_NAME = 'Device type filter for DWC';
+
+    public function getName(): string
     {
         return self::PLUGIN_NAME;
     }
 
-    public function getDisplayName()
+    public function getDisplayName(): string
     {
         return self::DISPLAY_NAME;
     }
 
-    public function getAuthenticationType()
+    public function getIcon(): string
     {
-        return self::AUTHENTICATION_TYPE;
+        return 'plugins/LeuchtfeuerDwcDeviceTypeBundle/Assets/img/leuchtfeuerdwcdevicetype.png';
     }
 }
