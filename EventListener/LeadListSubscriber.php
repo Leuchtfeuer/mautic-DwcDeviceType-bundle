@@ -6,39 +6,37 @@ use Mautic\LeadBundle\Event\LeadListFiltersChoicesEvent;
 use Mautic\LeadBundle\LeadEvents;
 use Mautic\LeadBundle\Model\ListModel;
 use Mautic\LeadBundle\Provider\FieldChoicesProviderInterface;
-use Mautic\PluginBundle\Helper\IntegrationHelper;
+use MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\Integration\Config;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LeadListSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private IntegrationHelper $helper, private ListModel $listModel, private TranslatorInterface $translator, private FieldChoicesProviderInterface $fieldChoicesProvider)
+    public function __construct(private Config $config, private ListModel $listModel, private TranslatorInterface $translator, private FieldChoicesProviderInterface $fieldChoicesProvider)
     {
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
-            LeadEvents::LIST_FILTERS_CHOICES_ON_GENERATE    => ['onFilterChoiceFieldsGenerate', 0],
+            LeadEvents::LIST_FILTERS_CHOICES_ON_GENERATE => ['onFilterChoiceFieldsGenerate', 0],
         ];
     }
 
-    public function onFilterChoiceFieldsGenerate(LeadListFiltersChoicesEvent $event)
+    public function onFilterChoiceFieldsGenerate(LeadListFiltersChoicesEvent $event): void
     {
-        $myIntegration = $this->helper->getIntegrationObject('LeuchtfeuerDwcDeviceType');
-
-        if (false === $myIntegration || !$myIntegration->getIntegrationSettings()->getIsPublished()) {
+        if (!$this->config->isPublished()) {
             return;
         }
 
         $config = [
-            'label'         => $this->translator->trans('mautic.plugin.device_type'),
-            'properties'    => [
-                'type'      => 'device_type',
-                'list'      => $this->fieldChoicesProvider->getChoicesForField('select', 'device_type'),
+            'label'      => $this->translator->trans('mautic.plugin.device_type'),
+            'properties' => [
+                'type' => 'device_type',
+                'list' => $this->fieldChoicesProvider->getChoicesForField('select', 'device_type'),
             ],
-            'operators'     => $this->listModel->getOperatorsForFieldType('multiselect'),
-            'object'        => 'lead',
+            'operators' => $this->listModel->getOperatorsForFieldType('multiselect'),
+            'object'    => 'lead',
         ];
 
         $event->addChoice('lead', 'device_type', $config);

@@ -4,13 +4,17 @@ namespace MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\EventListener;
 
 use Mautic\DynamicContentBundle\DynamicContentEvents;
 use Mautic\DynamicContentBundle\Event\ContactFiltersEvaluateEvent;
+use Mautic\DynamicContentBundle\Helper\DynamicContentHelper;
+use Mautic\EmailBundle\EventListener\MatchFilterForLeadTrait;
 use Mautic\LeadBundle\Model\DeviceModel;
-use Mautic\PluginBundle\Helper\IntegrationHelper;
+use MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\Integration\Config;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class DynamicContentSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private IntegrationHelper $helper, private DeviceModel $deviceModel)
+    use MatchFilterForLeadTrait;
+
+    public function __construct(private Config $config, private DeviceModel $deviceModel, private DynamicContentHelper $dynamicContentHelper)
     {
     }
 
@@ -23,9 +27,7 @@ class DynamicContentSubscriber implements EventSubscriberInterface
 
     public function onContactFiltersEvaluate(ContactFiltersEvaluateEvent $event): void
     {
-        $myIntegration = $this->helper->getIntegrationObject('LeuchtfeuerDwcDeviceType');
-
-        if (false === $myIntegration || !$myIntegration->getIntegrationSettings()->getIsPublished()) {
+        if (!$this->config->isPublished()) {
             return;
         }
 
@@ -33,44 +35,43 @@ class DynamicContentSubscriber implements EventSubscriberInterface
         $contact              = $event->getContact();
         $leadDeviceRepository = $this->deviceModel->getRepository();
         $leadDevice           = $leadDeviceRepository->getLeadDevices($contact);
-        if (empty($leadDevice)) {
+        if ([] === $leadDevice) {
             return;
         }
 
         $deviceType = $leadDevice[0]['device'];
+        $evaluated  = false;
+        $matched    = false;
         foreach ($filters as $filter) {
-            if ('device_type' === $filter['type']) {
-                switch ($filter['operator']) {
-                    case 'in':
-                        if (in_array($deviceType, $filter['filter'])) {
-                            $event->setIsEvaluated(true);
-                            $event->setIsMatched(in_array($deviceType, $filter['filter']));
-                        }
-                        break;
-                    case '!in':
-                        if (!in_array($deviceType, $filter['filter'])) {
-                            $event->setIsEvaluated(true);
-                            $event->setIsMatched(!in_array($deviceType, $filter['filter']));
-                        }
-                        break;
-                    case 'empty':
-                        if (empty($deviceType)) {
-                            $event->setIsEvaluated(true);
-                            $event->setIsMatched(empty($deviceType));
-                        }
-                        break;
-                    case '!empty':
-                        if (!empty($deviceType)) {
-                            $event->setIsEvaluated(true);
-                            $event->setIsMatched(!empty($deviceType));
-                        }
-                        break;
-                    default:
-                        $event->setIsEvaluated(true);
-                        $event->setIsMatched(false);
-                        break;
-                }
+            if ('device_type' !== $filter['type']) {
+                continue;
+            }
+
+            $evaluated = true;
+
+            switch ($filter['operator']) {
+                case 'in':
+                    $matched = in_array($deviceType, $filter['filter'], true);
+                    break;
+                case '!in':
+                    $matched = !in_array($deviceType, $filter['filter'], true);
+                    break;
+                case 'empty':
+                    $matched = null === $deviceType || '' === $deviceType;
+                    break;
+                case '!empty':
+                    $matched = null !== $deviceType && '' !== $deviceType;
+                    break;
+                default:
+                    throw new \InvalidArgumentException('Invalid filter operator: '.$filter['operator']);
             }
         }
+
+        if (!$evaluated) {
+            return;
+        }
+
+        $event->setIsEvaluated(true);
+        $event->setIsMatched($matched);
     }
 }
