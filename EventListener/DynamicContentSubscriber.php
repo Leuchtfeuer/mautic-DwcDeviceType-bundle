@@ -29,10 +29,10 @@ class DynamicContentSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $filters = $event->getFilters();
-        $contact = $event->getContact();
+        $filters              = $event->getFilters();
+        $contact              = $event->getContact();
         $leadDeviceRepository = $this->deviceModel->getRepository();
-        $leadDevice = $leadDeviceRepository->getLeadDevices($contact);
+        $leadDevice           = $leadDeviceRepository->getLeadDevices($contact);
         if (empty($leadDevice)) {
             return;
         }

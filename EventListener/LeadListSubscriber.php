@@ -12,10 +12,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LeadListSubscriber implements EventSubscriberInterface
 {
-
     public function __construct(private IntegrationHelper $helper, private ListModel $listModel, private TranslatorInterface $translator, private FieldChoicesProviderInterface $fieldChoicesProvider)
     {
-
     }
 
     public static function getSubscribedEvents()
@@ -32,7 +30,7 @@ class LeadListSubscriber implements EventSubscriberInterface
         if (false === $myIntegration || !$myIntegration->getIntegrationSettings()->getIsPublished()) {
             return;
         }
-        
+
         $config = [
             'label'         => $this->translator->trans('mautic.plugin.device_type'),
             'properties'    => [

@@ -12,7 +12,7 @@ return [
     'services'      => [
         'integrations'  => [
             'mautic.integration.leuchtfeuerdwcdevicetype' => [
-                'class'     => \MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\Integration\LeuchtfeuerDwcDeviceTypeIntegration::class,
+                'class'     => MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\Integration\LeuchtfeuerDwcDeviceTypeIntegration::class,
                 'arguments' => [
                     'event_dispatcher',
                     'mautic.helper.cache_storage',
