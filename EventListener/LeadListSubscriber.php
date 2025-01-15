@@ -32,8 +32,8 @@ class LeadListSubscriber implements EventSubscriberInterface
         $config = [
             'label'      => $this->translator->trans('mautic.plugin.device_type'),
             'properties' => [
-                'type' => 'device_type',
-                'list' => $this->fieldChoicesProvider->getChoicesForField('select', 'device_type'),
+                'type' => 'multiselect',
+                'list' => $this->fieldChoicesProvider->getChoicesForField('multiselect', 'device_type'),
             ],
             'operators' => $this->listModel->getOperatorsForFieldType('multiselect'),
             'object'    => 'lead',

@@ -43,7 +43,7 @@ class DynamicContentSubscriber implements EventSubscriberInterface
         $evaluated  = false;
         $matched    = false;
         foreach ($filters as $filter) {
-            if ('device_type' !== $filter['type']) {
+            if ('device_type' !== $filter['field']) {
                 continue;
             }
 
