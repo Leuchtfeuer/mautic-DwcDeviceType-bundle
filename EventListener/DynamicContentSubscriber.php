@@ -7,6 +7,7 @@ use Mautic\DynamicContentBundle\Event\ContactFiltersEvaluateEvent;
 use Mautic\DynamicContentBundle\Helper\DynamicContentHelper;
 use Mautic\EmailBundle\EventListener\MatchFilterForLeadTrait;
 use Mautic\LeadBundle\Model\DeviceModel;
+use Mautic\LeadBundle\Tracker\DeviceTracker;
 use MauticPlugin\LeuchtfeuerDwcDeviceTypeBundle\Integration\Config;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -14,7 +15,7 @@ class DynamicContentSubscriber implements EventSubscriberInterface
 {
     use MatchFilterForLeadTrait;
 
-    public function __construct(private Config $config, private DeviceModel $deviceModel, private DynamicContentHelper $dynamicContentHelper)
+    public function __construct(private Config $config, private DeviceModel $deviceModel, private DynamicContentHelper $dynamicContentHelper, private DeviceTracker $deviceTracker)
     {
     }
 
@@ -31,15 +32,10 @@ class DynamicContentSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $filters              = $event->getFilters();
-        $contact              = $event->getContact();
-        $leadDeviceRepository = $this->deviceModel->getRepository();
-        $leadDevice           = $leadDeviceRepository->getLeadDevices($contact);
-        if ([] === $leadDevice) {
-            return;
-        }
+        $filters    = $event->getFilters();
+        $leadDevice = $this->deviceTracker->getTrackedDevice();
 
-        $deviceType = $leadDevice[0]['device'];
+        $deviceType = $leadDevice?->getDevice() ?? 'smartphone';
         $evaluated  = false;
         $matched    = false;
         foreach ($filters as $filter) {
