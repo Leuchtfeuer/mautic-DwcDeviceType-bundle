@@ -34,8 +34,16 @@ class DynamicContentSubscriber implements EventSubscriberInterface
 
         $filters    = $event->getFilters();
         $leadDevice = $this->deviceTracker->getTrackedDevice();
+        $deviceType = $leadDevice?->getDevice();
 
-        $deviceType = $leadDevice?->getDevice() ?? 'smartphone';
+        if (null === $deviceType || '' === $deviceType) {
+            $contact              = $event->getContact();
+            $leadDeviceRepository = $this->deviceModel->getRepository();
+            $leadDevices          = $leadDeviceRepository->getLeadDevices($contact);
+            $deviceType           = $leadDevices[0]['device'] ?? null;
+        }
+
+        $deviceType = $deviceType ?? 'smartphone';
         $evaluated  = false;
         $matched    = false;
         foreach ($filters as $filter) {
