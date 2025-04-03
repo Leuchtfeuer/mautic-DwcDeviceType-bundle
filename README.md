@@ -9,6 +9,10 @@
 - Before installing plugin, please make sure to install changes from PR https://github.com/mautic/mautic/pull/13226, otherwise plugin will not work
 
 ## Installation
+### Composer
+This plugin can be installed through composer
+
+### Manual install
 - Plugin has to be saved within plugins/LeuchtfeuerDwcDeviceTypeBundle/
 - After completed installing of plugin, the cache has to be cleared (php bin/console c:c )
 - Reload plugins page and press "Install/Upgrade Plugins" button
