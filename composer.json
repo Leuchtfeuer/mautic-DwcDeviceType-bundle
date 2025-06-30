@@ -1,9 +1,17 @@
 {
   "name": "leuchtfeuer/mautic-dwc-device-type-bundle",
-  "description": "TODO",
-  "license": "TODO",
+  "description": "Adds the option to filter for device type in dynamic web content.",
+  "license": "GPL-3.0-or-later",
   "type": "mautic-plugin",
-  "homepage": "https://www.Leuchtfeuer.com",
+  "authors": [
+    {
+      "name": "Leuchtfeuer Digital Marketing GmbH",
+      "email": "mautic-plugins@Leuchtfeuer.com",
+      "homepage": "https://Leuchtfeuer.com/mautic/",
+      "role": "Developer"
+    }
+  ],
+  "keywords": ["mautic","plugin","integration","device-type"],
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
