@@ -1,7 +1,7 @@
 {
   "name": "leuchtfeuer/mautic-dwc-device-type-bundle",
   "description": "Adds the option to filter for device type in dynamic web content.",
-  "license": "GPL-3.0-or-later",
+  "license": "GPL-3.0",
   "type": "mautic-plugin",
   "authors": [
     {
